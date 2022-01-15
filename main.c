@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 21:05:08 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/13 13:42:51 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/15 18:03:43 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 void	A_to_B(int r, t_element **a, t_element **b);
 void	B_to_A(int r, t_element **a, t_element **b);
+int		check_sort(int r, t_element *temp);
+void check_stack(t_element *a, t_element *b);
+int	change_pivot(int r, int p, t_element *ab, char flag);
 
 
 void	prgm_init(t_program *prgm)
@@ -45,9 +48,8 @@ void	B_to_A(int r, t_element **a, t_element **b)
 
 	if (r == 0)
 		return ;
-	if (r == 1)
+	else if (r == 1)
 	{
-		//printf("\nB, r == 1 pa\n");
 		pab(a, b, "pa");
 		return ;
 	}
@@ -58,7 +60,8 @@ void	B_to_A(int r, t_element **a, t_element **b)
 	while (i-- > 0)
 		temp = temp->next;	
 	p = temp->val;
-	//printf("\nB_to_A, r : %d, p : %d\n",r,p);
+	if ((*b)->val < p)
+		p = change_pivot(r, p, *b, 'b');
 	while (r > 0)
 	{
 		if ((*b)->val < p)
@@ -76,28 +79,125 @@ void	B_to_A(int r, t_element **a, t_element **b)
 	i = rb_cnt;
 	while (i-- > 0)
 		*b = rrab(*b, "rrb");
-	temp = *a;
-	printf("A : ");
-	while (1 && temp)
-	{
-		printf("%d ",temp->val);
-		temp = temp->next;
-		if ((*a)->val == temp->val)
-			break;
-	}
-	printf("\nB : ");
-	temp = *b;
-	while (1 && temp)
-	{
-		printf("%d ",temp->val);
-		temp = temp->next;
-		if ((*b)->val == temp->val)
-			break;
-	}
-	printf("\n");
+//	check_stack(*a, *b);
 	A_to_B(pa_cnt, a, b);
 	B_to_A(rb_cnt, a, b);
 }
+
+int check_sort(int r, t_element *temp)
+{
+	while (r > 1)
+	{
+		if (temp->val > temp->next->val)
+			return (0);
+		temp = temp->next;
+		r--;
+	}
+	return (1);
+}
+
+int	change_pivot(int r, int p, t_element *ab, char flag)
+{
+	t_element *temp;
+
+	temp = ab;
+	if (flag == 'a')
+	{
+		while (r-- - 1 > 0)
+			temp = temp->next;
+		r = temp->val;
+		temp->val = ab->val;
+		ab->val = r;
+		p = temp->val;
+	}
+	if (flag == 'b')
+	{
+		while (r-- - 1 > 0)
+			temp = temp->next;
+		r = temp->val;
+		temp->val = ab->val;
+		ab->val = r; 
+		p = temp->val;
+	}
+	return (p);
+}
+
+void	find_maxmin(t_element **a, int *max, int *min)
+{
+	int	val;
+
+	val = (*a)->val;
+	*max = (*a)->val;
+	*min = (*a)->val;
+	while (1)
+	{
+		if ((*a)->val > *max)
+			*max = (*a)->val;
+		if ((*a)->val < *min)
+			*min = (*a)->val;
+		*a = (*a)->next;
+		if (val == (*a)->val)
+			break ;
+	}
+}
+
+int	sort_three(t_element **a)
+{
+	int max;
+	int min;
+
+	if ((*a)->prev->val != (*a)->next->next->val)
+		return (0);
+	find_maxmin(a, &max, &min);
+	if ((*a)->val == min)
+	{
+		*a = rab(*a, "ra");
+		*a = sab(*a, "sa");
+		*a = rrab(*a, "rra");
+	}
+	else if ((*a)->next->val == min)
+	{
+		if ((*a)->val == max)
+			*a = rab(*a, "ra");
+		else
+			*a = sab(*a, "sa"); 
+	}
+	else
+	{
+		if ((*a)->val == max)
+		{
+			*a = sab(*a, "sa");
+			*a = rrab(*a, "rra");
+		}
+		else
+			*a = rrab(*a, "rra");
+	}
+	return (1);
+}
+
+/*
+void	sort_three(t_element **a)
+{
+	int	max;
+	int	min;
+	
+	find_maxmin(a, &max, &min);
+	if ((*a)->val == min)
+	{
+		*a = rab(*a, "ra");
+		*a = sab(*a, "sa");
+		*a = rrab(*a, "rra");
+		return ;
+	}
+	else if ((*a)->next->val != max)
+	*a = sab(*a, "sa");
+	*a = rab(*a, "ra");
+	*a = sab(*a, "sa");
+	*a = rrab(*a, "rra");
+	if ((*a)->val != min)
+		*a = sab(*a, "sa");
+}
+*/
 
 void	A_to_B(int r, t_element **a, t_element **b)
 {
@@ -107,20 +207,18 @@ void	A_to_B(int r, t_element **a, t_element **b)
 	int pb_cnt;
 	t_element *temp;
 
-	if (r == 1 || r == 0)
-	{
-		//printf("\nA r == 1 end\n");
+	if (check_sort(r, *a) == 1)
 		return ;
-	}
 	else if (r == 2)
 	{
 		if ((*a)->val > (*a)->next->val)
-		{
-			i = (*a)->next->val;
-			(*a)->next->val = (*a)->val;
-			(*a)->val = i;
-		}
+			*a = sab(*a, "sa");
 		return ;
+	}
+	else if (r == 3)
+	{
+		if (sort_three(a) == 1)
+			return ;
 	}
 	temp = *a;
 	ra_cnt = 0;
@@ -130,26 +228,17 @@ void	A_to_B(int r, t_element **a, t_element **b)
 		temp = temp->next;
 	p = temp->val;
 	if ((*a)->val > p)
-	{
-		i = r;
-		temp = *a;
-		while (i - 1 > 0)
-		{
-			temp = temp->next;
-			i--;
-		}
-		i = temp->val;
-		temp->val = (*a)->val;
-		(*a)->val = i;
-		p = temp->val;
-	}
+		p = change_pivot(r, p, *a, 'a');
 	i = r;
 	while (i > 0)
 	{
 		if ((*a)->val >= p)
 		{
-			*a = rab(*a, "ra");
-			ra_cnt++;
+			if ((*a)->val != p)
+			{	
+				*a = rab(*a, "ra");	
+				ra_cnt++;
+			}
 		}
 		else
 		{
@@ -159,64 +248,19 @@ void	A_to_B(int r, t_element **a, t_element **b)
 		i--;
 	}
 	i = ra_cnt;
-	while (i-- > 0)
-		*a = rrab(*a, "rra");
-	/*
-	if (pb_cnt == 0)
-	{
-		i = r;
-		temp = *a;
-		while (i - 1 > 0)
-		{
-			temp = temp->next;
-			i--;
-		}
-		i = temp->val;
-		temp->val = (*a)->val;
-		(*a)->val = i;
-	}
-	*/
-	temp = *a;
-	printf("A : ");
-	while (1 && temp)
-	{
-		printf("%d ",temp->val);
-		temp = temp->next;
-		if ((*a)->val == temp->val)
-			break;
-	}
-	printf("\nB : ");
-	temp = *b;
-	while (1 && temp)
-	{
-		printf("%d ",temp->val);
-		temp = temp->next;
-		if ((*b)->val == temp->val)
-			break;
-	}
-	printf("\n");
-	A_to_B(ra_cnt, a, b);
+//	if (ra_cnt > 1 && j + 1 != ra_cnt)
+		while (i-- > 0)
+			*a = rrab(*a, "rra");
+//	check_stack(*a, *b);
+	A_to_B(ra_cnt + 1, a, b); //마지막자리 피봇을 ra 안해주기로 했기에 + 1
 	B_to_A(pb_cnt, a, b);
 }
 
-int	main(int nb, char **arg)
+void check_stack(t_element *a, t_element *b)
 {
-	t_element	*a;
-	t_element	*b;
-	t_program	prgm;
 	t_element	*temp;
-
-	prgm_init(&prgm);
-	a = NULL; //왜? 차이가 없어서 뺐다.
-	b = NULL; //왜?? 일단 제거
-	a = stack_init(nb, arg, &prgm);
-	if (error_check(&prgm, nb, a) == 1)
-		return (0);
-	A_to_B(nb - 1, &a, &b);
-//	A_to_B(4, &a, &b);
-//	A_to_B(4, &a, &b);
-//	B_to_A(9, &a, &b);
-//	A_to_B(2, &a, &b);
+	
+	temp = 0;
 	printf("A : ");
 	temp = a;
 	while (1 && temp)
@@ -235,5 +279,22 @@ int	main(int nb, char **arg)
 		if ((b)->val == temp->val)
 			break;
 	}
+	printf("\n");
+}
+
+int	main(int nb, char **arg)
+{
+	t_element	*a;
+	t_element	*b;
+	t_program	prgm;
+
+	prgm_init(&prgm);
+	a = NULL; //왜? 차이가 없어서 뺐다.
+	b = NULL; //왜?? 일단 제거
+	a = stack_init(nb, arg, &prgm);
+	if (error_check(&prgm, nb, a) == 1)
+		return (0);
+	A_to_B(nb - 1, &a, &b);
+//	check_stack(a, b);
 	return (0);
 }
