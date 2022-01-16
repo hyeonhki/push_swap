@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 10:26:09 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/06 16:57:10 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/16 16:57:25 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	my_putstr(char *str)
 {
+	if (str == 0)
+		return ;
 	while (*str)
 	{
 		write(1, str, 1);

@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 21:05:08 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/16 02:10:30 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/16 20:22:55 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ void	A_to_B(int r, int *flag, t_element **a, t_element **b);
 void	B_to_A(int r, int *flag, t_element **a, t_element **b);
 int		check_sort(int r, t_element *temp);
 void check_stack(t_element *a, t_element *b);
-void	change_pivot(int r, int *p, t_element **ab, char flag);
-
+void	sort_three(t_element **a);
+int	get_pivot(int r, t_element *a);
+void	find_maxmin(int r, t_element *a, int *max, int *min);
+int find_pivot(int r, t_element *list);
 
 void	prgm_init(t_program *prgm)
 {
@@ -38,54 +40,6 @@ int error_check(t_program *prgm, int nb, t_element *a)
 	return (0);
 }
 
-void	B_to_A(int r, int *flag, t_element **a, t_element **b)
-{
-	int p;
-	int i;
-	int rb_cnt;
-	int pa_cnt;
-	t_element *temp;
-
-	if (r == 0)
-		return ;
-	else if (r == 1)
-	{
-		pab(a, b, "pa");
-		return ;
-	}
-	temp = *b;
-	rb_cnt = 0;
-	pa_cnt = 0;
-	i = r - 1;
-	while (i-- > 0)
-		temp = temp->next;	
-	p = (*b)->val; //피봇 맨앞으로 옮김
-//	printf("B - p %d\n",p);
-//	if ((*b)->val < p)
-//		change_pivot(r, &p, b, 'b');
-	while (r > 0)
-	{
-		if ((*b)->val < p)
-		{
-			*b = rab(*b, "rb");
-			rb_cnt++;
-		}
-		else
-		{
-			pab(a, b, "pa");
-			pa_cnt++;
-		}
-		r--;
-	}
-	i = rb_cnt;
-	while (i-- > 0)
-		*b = rrab(*b, "rrb");
-	*flag = 1;
-//	check_stack(*a, *b);
-	A_to_B(pa_cnt, flag, a, b);
-	B_to_A(rb_cnt, flag, a, b);
-}
-
 int check_sort(int r, t_element *temp)
 {
 	while (r > 1)
@@ -98,56 +52,29 @@ int check_sort(int r, t_element *temp)
 	return (1);
 }
 
-void	change_pivot(int r, int *p, t_element **ab, char flag)
-{
-	t_element *temp;
-	int i;
-
-	i = r;
-	temp = *ab;
-	while (i - 1 > 0)
-	{
-		temp = temp->next;
-		i--;
-	}
-	if (temp->val != (*ab)->prev->val)
-		return ;
-	while (i++ <= r)
-		temp = temp->prev;
-	if (flag == 'a')
-		*ab = rab(*ab, "ra");
-	if (flag == 'b')
-		*ab = rab(*ab, "rb");
-	*p = (*ab)->prev->val;
-}
-
-void	find_maxmin(t_element **a, int *max, int *min)
+void	find_maxmin(int r, t_element *a, int *max, int *min)
 {
 	int	val;
 
-	val = (*a)->val;
-	*max = (*a)->val;
-	*min = (*a)->val;
-	while (1)
+	val = a->val;
+	*max = a->val;
+	*min = a->val;
+	while (r-- > 0)
 	{
-		if ((*a)->val > *max)
-			*max = (*a)->val;
-		if ((*a)->val < *min)
-			*min = (*a)->val;
-		*a = (*a)->next;
-		if (val == (*a)->val)
-			break ;
+		if (a->val > *max)
+			*max = a->val;
+		if (a->val < *min)
+			*min = a->val;
+		a = a->next;
 	}
 }
 
-int	sort_three(t_element **a)
+void	sort_three(t_element **a)
 {
 	int max;
 	int min;
 
-	if ((*a)->prev->val != (*a)->next->next->val)
-		return (0);
-	find_maxmin(a, &max, &min);
+	find_maxmin(3, *a, &max, &min);
 	if ((*a)->val == min)
 	{
 		*a = rab(*a, "ra");
@@ -171,7 +98,6 @@ int	sort_three(t_element **a)
 		else
 			*a = rrab(*a, "rra");
 	}
-	return (1);
 }
 
 void	sort_three_flag(t_element **a)
@@ -179,7 +105,7 @@ void	sort_three_flag(t_element **a)
 	int	max;
 	int	min;
 	
-	find_maxmin(a, &max, &min);
+	find_maxmin(3, *a, &max, &min);
 	if ((*a)->val == min)
 	{
 		*a = rab(*a, "ra");
@@ -188,12 +114,35 @@ void	sort_three_flag(t_element **a)
 		return ;
 	}
 	else if ((*a)->next->val != max)
-	*a = sab(*a, "sa");
+		*a = sab(*a, "sa");
 	*a = rab(*a, "ra");
 	*a = sab(*a, "sa");
 	*a = rrab(*a, "rra");
 	if ((*a)->val != min)
 		*a = sab(*a, "sa");
+}
+
+int find_pivot(int r, t_element *list)
+{
+	int min;
+	int	max;
+	int second;
+
+	find_maxmin(5, list, &max, &min);
+	min = max;
+	second = max;
+	while (r-- > 0)
+	{
+		if (list->val < min)
+		{
+			second = min;
+			min = list->val;
+		}
+		else if (list->val < second && list->val != min)
+			second = list->val;
+		list = list->next;
+	}
+	return (second);
 }
 
 int	get_pivot(int r, t_element *a)
@@ -204,11 +153,14 @@ int	get_pivot(int r, t_element *a)
 	t_element	*temp;
 	t_element	*temp2;
 
+	if (r == 5)
+		return (find_pivot(r, a));
 	temp = a;
 	temp2 = a;
 	p = temp->val;
 	cnt = 0;
 	i = 0;
+	
 	while (i < r || i < 10)
 	{
 		if (p < temp->val)
@@ -218,9 +170,135 @@ int	get_pivot(int r, t_element *a)
 		temp = temp->next;
 		i++;
 	}
+	
 	return (p);
 }
 
+void swap(int *arr, int a, int b)
+{
+	int temp;
+
+	temp = *(arr + a);
+	*(arr + a) = *(arr + b);
+	*(arr + b) = temp;
+}
+
+int partition(int *arr, int left, int right)
+{
+	int pivot;
+	int low;
+	int high;
+
+	pivot = arr[left];
+	low = left + 1;
+	high = right;
+
+	while (low <= high)
+	{
+		while (low <= right && pivot >= arr[low])
+			low++;
+		while (high >= (left + 1) && pivot <= arr[high])
+			high--;
+		if (low <= high)
+			swap(arr, low, high);
+	}
+	swap(arr, left, high);
+	return (high);	
+}
+
+void	q_sort(int *arr, int left, int right)
+{
+	int pivot;
+	
+	if (left <= right)
+	{
+		pivot = partition(arr, left, right);
+		q_sort(arr, left, pivot - 1);
+		q_sort(arr, pivot + 1, right);
+	}
+}
+
+int		pivot_sort(int r, t_element *a)
+{
+	int	*arr;
+	int i;
+	int j;
+	
+	i = a->val;
+	j = 0;
+	arr = (int *)malloc(r * sizeof(int));
+	while (1)
+	{
+		arr[j] = a->val;
+		a = a->next;
+		j++;
+		if (a->next->val == i)
+		{
+			arr[j++] = a->val;
+			break ;
+		}
+	}
+	a = a->next;
+	q_sort(arr, 0, r - 1);
+	return (arr[(r / 2)]);
+}
+
+void	B_to_A(int r, int *flag, t_element **a, t_element **b)
+{
+	int p;
+	int i;
+	int rb_cnt;
+	int pa_cnt;
+	int cnt;
+	t_element *temp;
+
+	if (r == 0)
+		return ;
+	else if (r == 1)
+	{
+		pab(a, b, "pa");
+		return ;
+	}
+	else if (r == 2)
+	{
+		pab(a, b, "pa");
+		pab(a, b, "pa");
+		if ((*a)->val > (*a)->next->val)
+			*a = sab(*a, "sa");
+		return ;
+	}
+	temp = *b;
+	rb_cnt = 0;
+	pa_cnt = 0;
+	cnt = 0;
+	i = r - 1;
+	while (i-- > 0)
+		temp = temp->next;	
+	p = pivot_sort(r, *b);
+	while (r > 0)
+	{
+		if ((*b)->val < p)
+		{
+			*b = rab(*b, "rb");
+			rb_cnt++;
+			cnt++;
+		}
+		else
+		{
+			pab(a, b, "pa");
+			pa_cnt++;
+			cnt = 0;
+		}
+		r--;
+	}
+	i = rb_cnt;
+	while (i-- > 0)
+		*b = rrab(*b, "rrb");
+	*flag = 1;
+//	check_stack(*a, *b);
+	A_to_B(pa_cnt, flag, a, b);
+	B_to_A(rb_cnt, flag, a, b);
+}
 
 void	A_to_B(int r, int *flag, t_element **a, t_element **b)
 {
@@ -228,8 +306,8 @@ void	A_to_B(int r, int *flag, t_element **a, t_element **b)
 	int i;
 	int ra_cnt;
 	int pb_cnt;
+	int cnt;
 
-//	printf("A - r %d\n",r);
 	if (check_sort(r, *a) == 1)
 		return ;
 	else if (r == 2)
@@ -240,38 +318,38 @@ void	A_to_B(int r, int *flag, t_element **a, t_element **b)
 	}
 	else if (r == 3)
 	{
-		if (sort_three(a) == 1)
-			return ;
-	//	else
-	//		return (sort_three_flag(a));
+		if ((*a)->prev->val == (*a)->next->next->val)
+				return (sort_three(a));
+//		return (sort_three_flag(a));
 	}
 	ra_cnt = 0;
 	pb_cnt = 0;
-//	p = (*a)->val; //피봇 맨앞으로 옮김
-	p = get_pivot(r, *a);
+	cnt = 0;
+	p = pivot_sort(r, *a);
+//	check_stack(*a, *b);
+//	p = get_pivot(r, *a);
 	i = r;
 	while (i > 0)
 	{
 		if ((*a)->val > p)
 		{
-				*a = rab(*a, "ra");	
-				ra_cnt++;
+			*a = rab(*a, "ra");	
+			ra_cnt++;
+			cnt++;
 		}
 		else
 		{
 			pab(b, a, "pb");
 			pb_cnt++;
+			cnt = 0;
 		}
 		i--;
 	}
 	if (ra_cnt == 0)
 			*b = sab(*b, "sb");
-//	if (pb_cnt == 0)
-//			*a = sab(*a, "sa");
 	i = ra_cnt;
-//	if (ra_cnt > 1 && j + 1 != ra_cnt)
-		while (i-- > 0 && *flag != 0)
-			*a = rrab(*a, "rra");
+	while (i-- > 0 && *flag != 0)
+		*a = rrab(*a, "rra");
 //	check_stack(*a, *b);
 	A_to_B(ra_cnt, flag, a, b); //마지막자리 피봇을 ra 안해주기로 했기에 + 1
 	B_to_A(pb_cnt, flag, a, b);
