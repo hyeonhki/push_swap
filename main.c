@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 21:05:08 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/16 20:22:55 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/16 20:58:43 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	sort_three_flag(t_element **a)
 		*a = sab(*a, "sa");
 }
 
-int find_pivot(int r, t_element *list)
+int five_pivot(int r, t_element *list)
 {
 	int min;
 	int	max;
@@ -143,35 +143,6 @@ int find_pivot(int r, t_element *list)
 		list = list->next;
 	}
 	return (second);
-}
-
-int	get_pivot(int r, t_element *a)
-{
-	int i;
-	int p;
-	int cnt;
-	t_element	*temp;
-	t_element	*temp2;
-
-	if (r == 5)
-		return (find_pivot(r, a));
-	temp = a;
-	temp2 = a;
-	p = temp->val;
-	cnt = 0;
-	i = 0;
-	
-	while (i < r || i < 10)
-	{
-		if (p < temp->val)
-			cnt += 1;
-		if (cnt == 2)
-			return (p);
-		temp = temp->next;
-		i++;
-	}
-	
-	return (p);
 }
 
 void swap(int *arr, int a, int b)
@@ -223,7 +194,7 @@ int		pivot_sort(int r, t_element *a)
 	int	*arr;
 	int i;
 	int j;
-	
+
 	i = a->val;
 	j = 0;
 	arr = (int *)malloc(r * sizeof(int));
@@ -243,14 +214,34 @@ int		pivot_sort(int r, t_element *a)
 	return (arr[(r / 2)]);
 }
 
+int		r_range(int r, t_element **b)
+{
+	int i;
+	int	k;
+	int ret;
+
+	k = 1;
+	i = (*b)->prev->val;
+	while (k++ < r)
+		*b = (*b)->next;
+	if (i == (*b)->val)
+	{
+		ret = 0;
+	}
+	else
+		ret = 1;
+	while (k-- > 2)
+		*b = (*b)->prev;
+	return (ret);
+}
+
 void	B_to_A(int r, int *flag, t_element **a, t_element **b)
 {
 	int p;
 	int i;
 	int rb_cnt;
 	int pa_cnt;
-	int cnt;
-	t_element *temp;
+	int	cnt;
 
 	if (r == 0)
 		return ;
@@ -267,13 +258,10 @@ void	B_to_A(int r, int *flag, t_element **a, t_element **b)
 			*a = sab(*a, "sa");
 		return ;
 	}
-	temp = *b;
 	rb_cnt = 0;
 	pa_cnt = 0;
 	cnt = 0;
-	i = r - 1;
-	while (i-- > 0)
-		temp = temp->next;	
+	*flag = r_range(r, b);
 	p = pivot_sort(r, *b);
 	while (r > 0)
 	{
@@ -281,18 +269,16 @@ void	B_to_A(int r, int *flag, t_element **a, t_element **b)
 		{
 			*b = rab(*b, "rb");
 			rb_cnt++;
-			cnt++;
 		}
 		else
 		{
 			pab(a, b, "pa");
 			pa_cnt++;
-			cnt = 0;
 		}
 		r--;
 	}
 	i = rb_cnt;
-	while (i-- > 0)
+	while (i-- > 0 && *flag != 0)
 		*b = rrab(*b, "rrb");
 	*flag = 1;
 //	check_stack(*a, *b);
@@ -320,14 +306,13 @@ void	A_to_B(int r, int *flag, t_element **a, t_element **b)
 	{
 		if ((*a)->prev->val == (*a)->next->next->val)
 				return (sort_three(a));
-//		return (sort_three_flag(a));
+	//	return (sort_three_flag(a));
 	}
 	ra_cnt = 0;
 	pb_cnt = 0;
 	cnt = 0;
 	p = pivot_sort(r, *a);
 //	check_stack(*a, *b);
-//	p = get_pivot(r, *a);
 	i = r;
 	while (i > 0)
 	{
