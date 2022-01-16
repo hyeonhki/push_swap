@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 21:05:08 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/16 20:58:43 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/16 22:12:58 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,13 +292,12 @@ void	A_to_B(int r, int *flag, t_element **a, t_element **b)
 	int i;
 	int ra_cnt;
 	int pb_cnt;
-	int cnt;
 
 	if (check_sort(r, *a) == 1)
 		return ;
 	else if (r == 2)
 	{
-		if ((*a)->val > (*a)->next->val)
+		if ((*a)->val >= (*a)->next->val)
 			*a = sab(*a, "sa");
 		return ;
 	}
@@ -306,13 +305,10 @@ void	A_to_B(int r, int *flag, t_element **a, t_element **b)
 	{
 		if ((*a)->prev->val == (*a)->next->next->val)
 				return (sort_three(a));
-	//	return (sort_three_flag(a));
 	}
 	ra_cnt = 0;
 	pb_cnt = 0;
-	cnt = 0;
 	p = pivot_sort(r, *a);
-//	check_stack(*a, *b);
 	i = r;
 	while (i > 0)
 	{
@@ -320,18 +316,14 @@ void	A_to_B(int r, int *flag, t_element **a, t_element **b)
 		{
 			*a = rab(*a, "ra");	
 			ra_cnt++;
-			cnt++;
 		}
 		else
 		{
 			pab(b, a, "pb");
 			pb_cnt++;
-			cnt = 0;
 		}
 		i--;
 	}
-	if (ra_cnt == 0)
-			*b = sab(*b, "sb");
 	i = ra_cnt;
 	while (i-- > 0 && *flag != 0)
 		*a = rrab(*a, "rra");
