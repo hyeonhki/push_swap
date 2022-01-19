@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 11:05:16 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/07 12:29:30 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/19 15:38:19 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ t_element	*rab(t_element *ab, char *com)
 		my_putstr(com);
 	return (out);
 }
-
 
 t_element	*rrab(t_element *ab, char *com)
 {

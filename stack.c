@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 12:31:24 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/06 16:56:37 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/19 15:44:59 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_element	*push(t_element *dest, t_element **from)
 
 	out = malloc(sizeof(t_element));
 	if (out == NULL)
-		return (NULL);	//왜??
+		return (NULL);
 	if (dest == NULL)
 	{
 		free(out);
@@ -59,7 +59,7 @@ t_element	*push(t_element *dest, t_element **from)
 	out->next = dest;
 	out->prev = dest->prev;
 	dest->prev->next = out;
-	dest->prev = out; // 그림을 통해 이해해보면 쉬운데 양방향이 될 수 있게끔 연결해준다
+	dest->prev = out;
 	return (out);
 }
 

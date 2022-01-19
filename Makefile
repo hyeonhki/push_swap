@@ -6,12 +6,12 @@
 #    By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 10:29:00 by hyeonhki          #+#    #+#              #
-#    Updated: 2022/01/06 16:49:09 by hyeonhki         ###   ########.fr        #
+#    Updated: 2022/01/19 12:06:15 by hyeonhki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= push_swap
-SRCS	= main.c utils.c error.c stack.c operator.c operator_two.c
+SRCS	= main.c utils.c error.c stack.c operator.c operator_two.c sort.c q_sort.c
 OBJS	= $(SRCS:.c=.o)
 CC		= gcc
 RM		= rm -f

@@ -6,11 +6,22 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:03:29 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/06 17:09:11 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/19 15:38:04 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+int	error_check(t_program *prgm, int nb, t_element *a)
+{
+	if (prgm->letter == 1)
+		return (msg_error("Error\nLetter is included.\n"));
+	if (prgm->range == 1)
+		return (msg_error("Error\nInt range\n"));
+	if (double_check(nb, a) == 1)
+		return (msg_error("Error\nDouble!\n"));
+	return (0);
+}
 
 int	msg_error(char *str)
 {
