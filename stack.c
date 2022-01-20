@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 12:31:24 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/20 19:16:24 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/20 22:28:11 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,15 @@ t_element	*del_top(t_element *dest)
 		out = NULL;
 		return (NULL);
 	}
-//	out = malloc(sizeof(t_element));
+//	oddut = malloc(sizeof(t_element));
 	out = dest->next;
 	out->prev = dest->prev;
 	dest->prev->next = out;
+//	free(dest);
 	return (out);
 }
 
-t_element	*push(t_element *dest, t_element **from)
+t_element	*push(t_element *dest, int val)
 {
 	t_element	*out;
 
@@ -53,9 +54,9 @@ t_element	*push(t_element *dest, t_element **from)
 	if (dest == NULL)
 	{
 		free(out);
-		return (create_list((*from)->val));
+		return (create_list(val));
 	}
-	out->val = (*from)->val;
+	out->val = val;
 	out->next = dest;
 	out->prev = dest->prev;
 	dest->prev->next = out;
@@ -71,14 +72,11 @@ t_element	*pop(t_element *dest, t_element **to)
 		return (NULL);
 	if (dest == dest->next)
 	{
-		*to = push(*to, &dest);
+		*to = push(*to, dest->val);
 		out = NULL;
 		return (NULL);
 	}
-//	out = malloc(sizeof(t_element));
-//	if (out == NULL)
-//		return (NULL);
-	*to = push(*to, &dest);
+	*to = push(*to, dest->val);
 	out = dest->next;
 	out->prev = dest->prev;
 	dest->prev->next = out;
@@ -95,7 +93,7 @@ t_element	*stack_init(int nb, char **arg, t_program *prgm)
 	while (nb > 1)
 	{
 		temp->val = my_getnbr(arg[nb - 1], prgm);
-		a = push(a, &temp);
+		a = push(a, temp->val);
 		nb--;
 	}
 	free(temp);

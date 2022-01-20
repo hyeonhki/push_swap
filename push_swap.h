@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 20:38:18 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/19 15:42:47 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/20 22:06:13 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_program
 }				t_program;
 
 t_element			*create_list(int val);
-t_element			*push(t_element *dest, t_element **from);
+t_element			*push(t_element *dest, int val);
 t_element			*pop(t_element *dest, t_element **to);
 t_element			*del_top(t_element *dest);
 t_element			*stack_init(int nb, char **arg, t_program *prgm);

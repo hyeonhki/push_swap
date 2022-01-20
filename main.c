@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 21:05:08 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/20 19:17:01 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/20 22:16:45 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	main(int nb, char **arg)
 	if (error_check(&prgm, nb, a) == 1)
 		return (0);
 	atob(nb - 1, 0, &a, &b);
+//	system("leaks push_swap | grep \"total leaked\"");
 //	check_stack(a, b);
 	return (0);
 }
