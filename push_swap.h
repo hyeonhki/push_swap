@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 20:38:18 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/20 22:06:13 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/21 00:11:15 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ typedef struct s_program
 	int					error;
 	int					nbrneg;
 }				t_program;
+
+void		DeleteFrontNodeFromCListNode(t_element **head);
+int		push2(t_element **stack, int elem);
+void	push4(t_element **dest, int val);
+void		del_top2(t_element **head);
 
 t_element			*create_list(int val);
 t_element			*push(t_element *dest, int val);

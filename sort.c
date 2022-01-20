@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 12:02:11 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/19 15:44:29 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/21 00:50:53 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ void	btoa(int r, int flag, t_element **a, t_element **b)
 	int	rb_cnt;
 	int	pa_cnt;
 
+//	printf("B st\n");
 	flag = r_range(r, b);
 	if (r == 1)
 	{
@@ -117,6 +118,8 @@ void	btoa(int r, int flag, t_element **a, t_element **b)
 	rb_cnt = 0;
 	pa_cnt = 0;
 	p = pivot_sort(r, *b);
+//	printf("r : %d p %d\n", r, p);
+//	check_stack(*a, *b);
 	while (r-- > 0)
 	{
 		if ((*b)->val < p)
@@ -133,6 +136,7 @@ void	btoa(int r, int flag, t_element **a, t_element **b)
 	i = rb_cnt;
 	while (i-- > 0 && flag != 0)
 		*b = rrab(*b, "rrb");
+//	printf("B fn\n");
 	atob(pa_cnt, flag, a, b);
 	btoa(rb_cnt, flag, a, b);
 }
@@ -180,6 +184,7 @@ void	atob(int r, int flag, t_element **a, t_element **b)
 	ra_cnt = 0;
 	pb_cnt = 0;
 	p = pivot_sort(r, *a);
+//	check_stack(*a, *b);
 	while (r-- > 0)
 	{
 		if ((*a)->val > p)
@@ -196,6 +201,7 @@ void	atob(int r, int flag, t_element **a, t_element **b)
 	i = ra_cnt;
 	while (i-- > 0 && flag != 0)
 		*a = rrab(*a, "rra");
+//	printf("A fin\n");
 	atob(ra_cnt, flag, a, b);
 	btoa(pb_cnt, flag, a, b);
 }

@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 11:05:16 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/20 22:15:34 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/21 00:50:24 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,15 @@ t_element	*sab(t_element *ab, char *com)
 	if (ab == NULL || ab == ab->next)
 		return (ab);
 	temp1 = ab->val;
-	ab = del_top(ab);
+//	ab = del_top(ab);
+	del_top2(&ab);
+//	DeleteFrontNodeFromCListNode(&ab);
 	temp2 = ab->val;
-	ab = del_top(ab);
+//	DeleteFrontNodeFromCListNode(&ab);
+	del_top2(&ab);	
+//	ab = del_top(ab);
+//	push4(&ab, temp1);
+//	push4(&ab, temp2);
 	ab = push(ab, temp1);
 	ab = push(ab, temp2);
 	if (com)
@@ -34,10 +40,19 @@ t_element	*sab(t_element *ab, char *com)
 
 void	pab(t_element **ab, t_element **ba, char *com)
 {
+//	t_element *temp;
+
 	if (*ba == NULL)
 		return ;
+//	check_stack(*ab, *ba);	
 	*ab = push(*ab, (*ba)->val);
-	*ba = del_top(*ba);
+//	check_stack(*ab, *ba);
+	//printf("A %d B %d\n",(*ab)->val, (*ba)->val);
+//	system("leaks push_swap | grep \"total leaked\"");
+//	DeleteFrontNodeFromCListNode(ba);
+	del_top2(ba);
+//	*ba = del_top(*ba);
+//	system("leaks push_swap | grep \"total leaked\"");
 	my_putstr(com);
 }
 
