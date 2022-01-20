@@ -6,7 +6,7 @@
 /*   By: hyeonhki <hyeonhki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 12:31:24 by hyeonhki          #+#    #+#             */
-/*   Updated: 2022/01/19 15:44:59 by hyeonhki         ###   ########.fr       */
+/*   Updated: 2022/01/20 19:16:24 by hyeonhki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_element	*del_top(t_element *dest)
 		out = NULL;
 		return (NULL);
 	}
-	out = malloc(sizeof(t_element));
+//	out = malloc(sizeof(t_element));
 	out = dest->next;
 	out->prev = dest->prev;
 	dest->prev->next = out;
@@ -75,9 +75,9 @@ t_element	*pop(t_element *dest, t_element **to)
 		out = NULL;
 		return (NULL);
 	}
-	out = malloc(sizeof(t_element));
-	if (out == NULL)
-		return (NULL);
+//	out = malloc(sizeof(t_element));
+//	if (out == NULL)
+//		return (NULL);
 	*to = push(*to, &dest);
 	out = dest->next;
 	out->prev = dest->prev;
@@ -98,5 +98,6 @@ t_element	*stack_init(int nb, char **arg, t_program *prgm)
 		a = push(a, &temp);
 		nb--;
 	}
+	free(temp);
 	return (a);
 }
